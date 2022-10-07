@@ -10,9 +10,7 @@
     div
       |入力されたデータ
       |{{ barcodeData }}
-  .modal__bg.absolute.w-full.h-full.top-0.left-0.z-20.bg-black.opacity-50(
-    @click='$emit("close")'
-  )
+  .modal__bg.absolute.w-full.h-full.top-0.left-0.z-20.bg-black.opacity-50(@click='close')
 </template>
   
 <script lang="ts">
