@@ -11,15 +11,17 @@
       |※モーダルを閉じるとデータがクリアされます。
       br
       |※取得できない場合は直接入力してください。
-    div.pt-4.font-bold
+    p.font-bold
       |入力されたデータ
       button.pointer-events-auto.px-4.ml-2.bg-blue-500.text-white.rounded-lg(
         v-if='barcodeData'
         @click='clear'
         )
         |clear
-    div
+    p
       |{{ barcodeData }}
+    .w-80.absolute.bottom-8
+      |{{ msg }}
   .modal__bg.absolute.w-full.h-full.top-0.left-0.z-20.bg-black.opacity-50(@click='close')
 </template>
   
@@ -30,6 +32,7 @@ export default Vue.extend({
   name: 'Modal',
   data: () => ({
     barcodeData: '',
+    msg: ''
   }),
   methods: {
     setFocus() {
@@ -38,11 +41,26 @@ export default Vue.extend({
     },
     close() {
       this.barcodeData = ''
+      this.msg = ''
       this.$emit("close")
     },
     clear() {
       this.barcodeData = ''
+      this.msg = ''
       this.setFocus()
+    }
+  },
+  watch: {
+    barcodeData(newData) {
+      if (newData.length > 0) {
+        const refs: any = this.$refs
+        if (newData.length == 13 && !isNaN(parseInt(newData))) {
+          refs.barcode.blur()
+          this.msg = 'フォーマットに則ったデータです。clearボタンを押すまで入力できません。'
+        } else {
+          this.msg = 'フォーマットに則ったデータではありません'
+        }
+      }
     }
   }
 })
