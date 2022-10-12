@@ -1,10 +1,14 @@
 <template lang="pug">
-div 
-  h1 test site
+div.m-4
+  h1.text-2xl test site
   button.px-4.py-2.bg-blue-900.text-white.rounded-lg(
     @click='openModal'
   )
     |open Modal
+  p.text-base
+    |コードは
+    span.font-bold.text-lg {{ code }}
+    |です。
   transition(name="fade")
     Modal(
       ref='child'
@@ -33,6 +37,11 @@ export default Vue.extend({
     },
     closeModal() {
       this.isModal = false
+    }
+  },
+  computed: {
+    code(): string | (string | null)[] {
+      return this.$route.query.code ? this.$route.query.code : "未設定"
     }
   }
 })
