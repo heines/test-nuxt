@@ -7,8 +7,10 @@
       )
     button.pointer-events-auto.px-4.py-2.bg-blue-900.text-white.ml-2.rounded-lg(@click='close')
       |close
-    p.text-xs
-      |※モーダルを閉じるとデータがクリアされます
+    p.text-xs.pt-2
+      |※モーダルを閉じるとデータがクリアされます。
+      br
+      |※取得できない場合は直接入力してください。
     div.pt-4.font-bold
       |入力されたデータ
       button.pointer-events-auto.px-4.ml-2.bg-blue-500.text-white.rounded-lg(
