@@ -1,6 +1,7 @@
 <template lang="pug">
 div.m-4
   h1.text-2xl test site
+  Carousel
   div.h-64
     p.text-base
       |コードは
@@ -48,6 +49,7 @@ div.m-4
 import test from 'node:test';
 import Vue from 'vue'
 import Modal from '~/components/Modal.vue';
+import Carousel from '~/components/Carousel.vue';
 
 export default Vue.extend({
   name: "IndexPage",
