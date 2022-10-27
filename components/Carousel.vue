@@ -10,7 +10,7 @@
           <div
             :class="{ carousel__page: true }"
             :style="styles(index)"
-            >{{ item.label }}</div>
+            >{{ item.label }} : {{ item.time }}秒</div>
         </div>
       </div>
     </div>
@@ -37,46 +37,53 @@ export default Vue.extend({
     current: 0,
     pageWidth: 200,
     blindfold: false,
+    timeoutID: 0,
     items: [
       {
-        label: "1 / 3秒",
+        label: "1",
         time: 3,
       },
       {
-        label: "2 / 0.5秒",
+        label: "2",
         time: 0.5,
       },
       {
-        label: "3 / 5秒",
+        label: "3",
         time: 5,
       },
       {
-        label: "4 / 1秒",
+        label: "4",
         time: 1,
       },
       {
-        label: "5 / 2秒",
-        time: 5,
+        label: "5",
+        time: 2,
       }
     ]
   }),
   mounted() {
     this.$nextTick(() => {
-      const autoScroll = () => {
-        setTimeout(() => {
-          this.next()
-          autoScroll()
-        }, this.items[this.current].time * 1000);
-      }
-      autoScroll()
+      this.autoScroll()
     })
   },
   methods: {
+    autoScroll() {
+      this.timeoutID = window.setTimeout(() => {
+          this.next()
+          this.autoScroll()
+      }, this.items[this.current].time * 1000);
+    },
     next() {
-      return this.current === this.items.length - 1 ? this.current = 0 : this.current++
+      window.clearTimeout(this.timeoutID)
+      this.current === this.items.length - 1 ? this.current = 0 : this.current++
+      this.autoScroll()
+      return 
     },
     prev() {
-      return this.current === 0 ? this.current = this.items.length - 1 : this.current--
+      window.clearTimeout(this.timeoutID)
+      this.current === 0 ? this.current = this.items.length - 1 : this.current--
+      this.autoScroll()
+      return 
     },
     isCurrent(page: number) {
       return this.current === page
