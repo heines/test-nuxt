@@ -114,6 +114,7 @@ export default Vue.extend({
       let z = 10
       if (this.current === this.isPPrev(num)) {
         n = -2
+        z = 10
       } else if (this.current === this.isPrev(num)) {
         n = -1
         z = 20
@@ -125,8 +126,10 @@ export default Vue.extend({
         z = 20
       } else if (this.current === this.isNNext(num)) {
         n = 2
+        z = 10
       } else {
         n = 3
+        z = 10
       }
       return {
         transform: `translate(${n * width}px`,
