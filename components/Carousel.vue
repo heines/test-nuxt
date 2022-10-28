@@ -144,13 +144,13 @@ export default Vue.extend({
 .carousel {
   width: 200px;
   &__container {
-    clip-path: inset(0);
     position: relative;
     height: 200px;
     width: 200px;
     display: inline-block;
     margin-left: auto;
     margin-right: auto;
+    overflow: hidden;
   }
   &__pages {
     position: relative;
