@@ -55,7 +55,8 @@ export default Vue.extend({
     playerVars: {
       rel: 0,
       controls: 0,
-      mute: 1
+      mute: 1,
+      origin: ''
     },
     items: [
       {
@@ -91,10 +92,13 @@ export default Vue.extend({
     ]
   }),
   mounted() {
-    this.videoCtrl()
-    this.$nextTick(() => {
-      this.autoScroll()
-    })
+    this.playerVars.origin = window.location.origin
+    window.setTimeout(() => {
+      this.videoCtrl()
+      this.$nextTick(() => {
+        this.autoScroll()
+      })
+    }, 100)
   },
   methods: {
     autoScroll() {
