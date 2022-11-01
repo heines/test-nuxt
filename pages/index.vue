@@ -54,6 +54,11 @@ import Carousel from '~/components/Carousel.vue';
 export default Vue.extend({
   name: "IndexPage",
   components: { Modal },
+  head: {
+    script: [
+      { src: "https://www.youtube.com/iframe_api" }
+    ]
+  },
   data: () => ({
     isModal: false as boolean,
     keyCode: '' as string,
