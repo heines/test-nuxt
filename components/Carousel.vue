@@ -12,9 +12,17 @@
             :style="styles(index)"
             >
             <img v-show="item.type === 1" :src="item.url" />
-            <video v-show="item.type === 2" controls muted ref="test">
+            <video v-show="item.type === 2" muted ref="test">
               <source :src="item.url" type='video/mp4' />
             </video>
+            <youtube
+              v-show="item.type === 3"
+              ref="youtube"
+              :video-id="item.url"
+              :playerVars="playerVars"
+              width="800"
+              height="450"
+              />
             <span>{{ index }} / {{ item.label }} : {{ item.time }}秒</span>
           </div>
         </div>
@@ -44,23 +52,28 @@ export default Vue.extend({
     pageWidth: 800,
     blindfold: false,
     timeoutID: 0,
+    playerVars: {
+      rel: 0,
+      controls: 0,
+      mute: 1
+    },
     items: [
       {
         label: "5",
-        time: 5,
+        time: 1,
         url: '/testmovie.mp4',
         type: 2
       },
       {
         label: "1",
-        time: 1,
-        url: 'https://www.youtube.com/embed/zkNzxsaCunU',
+        time: 10,
+        url: 'zkNzxsaCunU',
         type: 3
       },
       {
         label: "2",
-        time: 1,
-        url: 'https://www.youtube.com/embed/Gtku_jsNgAA',
+        time: 10,
+        url: 'Gtku_jsNgAA',
         type: 3
       },
       {
@@ -99,10 +112,19 @@ export default Vue.extend({
       const prevNum = tmp >= 0 ? tmp : this.items.length - 1
       if (this.items[this.current].type === 2) {
         this.refs().test[this.current].play()
+      } else if (this.items[this.current].type === 3) {
+        this.refs().youtube[this.current].player.playVideo()
       }
       if (this.items[prevNum].type === 2) {
         this.refs().test[prevNum].pause()
-        this.refs().test[prevNum].currentTime = 0
+        window.setTimeout(() => {
+          this.refs().test[prevNum].currentTime = 0
+        }, 500)
+      } else if (this.items[prevNum].type === 3) {
+        this.refs().youtube[prevNum].player.pauseVideo()
+        window.setTimeout(() => {
+          this.refs().youtube[prevNum].player.seekTo(0, true)
+        }, 500)
       }
     },
     next() {
