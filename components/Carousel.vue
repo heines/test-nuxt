@@ -10,7 +10,13 @@
           <div
             :class="{ carousel__page: true }"
             :style="styles(index)"
-            >{{ item.label }} : {{ item.time }}秒</div>
+            >
+            <img v-show="item.type === 1" :src="item.url" />
+            <video v-show="item.type === 2" controls muted ref="test">
+              <source :src="item.url" type='video/mp4' />
+            </video>
+            <span>{{ index }} / {{ item.label }} : {{ item.time }}秒</span>
+          </div>
         </div>
       </div>
     </div>
@@ -35,33 +41,44 @@ export default Vue.extend({
   name: "HelloWorld",
   data: () => ({
     current: 0,
-    pageWidth: 200,
+    pageWidth: 800,
     blindfold: false,
     timeoutID: 0,
     items: [
       {
+        label: "5",
+        time: 5,
+        url: '/testmovie.mp4',
+        type: 2
+      },
+      {
         label: "1",
-        time: 3,
+        time: 1,
+        url: 'https://www.youtube.com/embed/zkNzxsaCunU',
+        type: 3
       },
       {
         label: "2",
-        time: 0.5,
+        time: 1,
+        url: 'https://www.youtube.com/embed/Gtku_jsNgAA',
+        type: 3
       },
       {
         label: "3",
-        time: 5,
+        time: 1,
+        url: 'https://placehold.jp/800x450.png',
+        type: 1
       },
       {
         label: "4",
-        time: 1,
+        time: 0.5,
+        url: 'https://placehold.jp/3d4070/ffffff/800x450.jpg?text=jpg',
+        type: 1,
       },
-      {
-        label: "5",
-        time: 2,
-      }
     ]
   }),
   mounted() {
+    this.videoCtrl()
     this.$nextTick(() => {
       this.autoScroll()
     })
@@ -71,7 +88,22 @@ export default Vue.extend({
       this.timeoutID = window.setTimeout(() => {
           this.next()
           this.autoScroll()
+          this.videoCtrl()
       }, this.items[this.current].time * 1000);
+    },
+    refs():any {
+      return this.$refs
+    },
+    videoCtrl() {
+      const tmp = this.current - 1
+      const prevNum = tmp >= 0 ? tmp : this.items.length - 1
+      if (this.items[this.current].type === 2) {
+        this.refs().test[this.current].play()
+      }
+      if (this.items[prevNum].type === 2) {
+        this.refs().test[prevNum].pause()
+        this.refs().test[prevNum].currentTime = 0
+      }
     },
     next() {
       window.clearTimeout(this.timeoutID)
@@ -109,7 +141,6 @@ export default Vue.extend({
       return num
     },
     styles(num: number): { [key: string]: string } {
-      const width = 200
       let n = 3
       let z = 10
       if (this.current === this.isPPrev(num)) {
@@ -132,7 +163,7 @@ export default Vue.extend({
         z = 10
       }
       return {
-        transform: `translate(${n * width}px`,
+        transform: `translate(${n * this.pageWidth}px`,
         zIndex: String(z),
       }
     },
@@ -142,11 +173,11 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .carousel {
-  width: 200px;
+  width: 800px;
   &__container {
     position: relative;
-    height: 200px;
-    width: 200px;
+    width: 800px;
+    height: 450px;
     display: inline-block;
     margin-left: auto;
     margin-right: auto;
@@ -159,8 +190,8 @@ export default Vue.extend({
     position: absolute;
     top: 0;
     left: 0;
-    width: 200px;
-    height: 200px;
+    width: 800px;
+    height: 450px;
     background-color: #DDD;
     border: 1px solid #FFF;
     box-sizing: border-box;
@@ -168,6 +199,17 @@ export default Vue.extend({
     transition-duration: 0.5s;
     z-index: 10;
     font-size: 50px;
+    overflow: hidden;
+    img {
+      display: block;
+      height: 100%;
+    }
+    span {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
   }
   &__dots {
     display: flex;
